@@ -71,20 +71,30 @@
 <body>
     <main>
         <table>
-            <form novalidate action="http://localhost/first/user_auth_module/2_Signup.php" method="GET">
+            <form id="signup form" novalidate action="http://localhost/first/user_auth_module/2_Signup.php" method="GET">
                 <tr>
                     <td><input required focus type="text" id="fname" name="fname" placeholder="First Name" minlength="3"></td>
-                    <span id="fname_error" class="error" aria-live="polite"></span>
                 </tr>
                 <tr>
-                    <td><input required focus type="text" id="lname" name="lname" placeholder="Last Name"></td>
-                    
+                    <td><span id="fname_error" class="error" aria-live="polite"></span></td>
+                </tr>
+                <tr>
+                    <td><input required focus type="text" id="lname" name="lname" placeholder="Last Name" minlength="3"></td>
+                </tr>
+                <tr>    
+                    <td><span id="lname_error" class="error" aria-live="polite"></span></td>
                 </tr>
                 <tr>
                     <td><input required type="text" id="email" name="email" placeholder="Email"></td>
                 </tr>
+                <tr>    
+                    <td><span id="email_error" class="error" aria-live="polite"></span></td>
+                </tr>
                 <tr>
                     <td><input required type="password" id="pw" name="password" placeholder="Password"></td>
+                </tr>
+                <tr>    
+                    <td><span id="password" class="error" aria-live="polite"></span></td>
                 </tr>
                 <tr>
                     <td><button type="submit" id="sign up">sign up</button></td> 
@@ -97,10 +107,11 @@
     </main>
                 <!--Client side input validation-->
     <script>
+            //fname
             const fname = document.getElementById("fname");
-            const fname_error = document.querySelector(".error");
+            const fname_error = document.getElementById("fname_error");
             
-            const submit = document.getElementById("sign up");
+            const form = document.getElementById("signup form");
             
             fname.addEventListener("input", (event) => {
                 if(fname.validity.valid)
@@ -114,19 +125,12 @@
                 } 
             });
 
-            submit.addEventListener("submit", (event) => {
-                if(!fname.validity.valid)
-                {
-                    show_fname_error();
-                    event.preventDefault();
-                }
-            });
             function show_fname_error()
             {
                 const is_valid = /\d/.test(fname.value);
                 if(is_valid)
                 {
-                    fname_error.textContent = "Your name cannot contain numbers";
+                    fname_error.textContent = "Your first name cannot contain numbers";
                 }
                 else if(fname.validity.valueMissing)
                 {
@@ -134,10 +138,95 @@
                 }
                 else if(fname.validity.tooShort)
                 {
-                    fname_error.textContent = `Your name cannot be shorter than ${fname.minLength} 
+                    fname_error.textContent = `Your last name cannot be shorter than ${fname.minLength} 
                     characters long, you entered ${fname.value.length}`;
                 }
             }
+            //lname
+            const lname = document.getElementById("lname");
+            const lname_error = document.getElementById("lname_error")
+            
+            lname.addEventListener("input", (event) => {
+                if(lname.validity.valid)
+                {
+                    lname_error.textContent = "";
+                    lname_error.reset();
+                }
+                else
+                {
+                    show_lname_error();
+                }
+            });
+
+            function show_lname_error()
+            {
+                const is_valid = /\d/.test(lname.value);
+                if(is_valid)
+                {
+                    lname_error.textContent = "Your last name cannot contain numbers";
+                }
+                else if(fname.validity.valueMissing)
+                {
+                    lname_error.textContent = "You need to enter your Last Name";
+                }
+                else if(fname.validity.tooShort)
+                {
+                    lname_error.textContent = `Your last name cannot be shorter than ${lname.minLength} 
+                    characters long, you entered ${lname.value.length}`;
+                }  
+            }
+            //email
+            const email = document.getElementById("email");
+            const email_error = document.getElementById("email_error");
+
+            email.addEventListener("input", (event) => {
+                    if(email.validity.valid)
+                    {
+                        //password strength test
+                        email_error.textContent = "";
+                        email_error.reset();
+                    }
+                    else
+                    {
+                        show_email_error();
+                    }
+            });
+
+            function show_email_error()
+            { 
+                
+                let is_valid = /email/.test(email.value);
+                if(is_valid)
+                {
+                    email_eror.textContent = "This doesn't appear tobe a valid email";
+                }
+                else if(email.validity.valueMissing)
+                {
+                    email_error.textContent = "You need to enter your email";
+                }
+                else if(email.validity.tooShort)
+                {
+                    email_error.textContent = "Email too short";
+                }
+            }
+            //form submittion
+            form.addEventListener("submit", (event) => {
+                if(!fname.validity.valid)
+                {
+                    show_fname_error();
+                    event.preventDefault();
+                }
+                if(!lname.validity.valid)
+                {
+                    show_lname_error();
+                    event.preventDefault();
+                }
+                if(!email.validity.valid)
+                {
+                    show_email_error();
+                    event.preventDefault();
+                }                
+            });
     </script>    
 </body>
 </html>
