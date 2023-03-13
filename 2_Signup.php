@@ -73,28 +73,28 @@
         <table>
             <form id="signup form" novalidate action="http://localhost/first/user_auth_module/2_Signup.php" method="GET">
                 <tr>
-                    <td><input required focus type="text" id="fname" name="fname" placeholder="First Name" minlength="3"></td>
+                    <td><input required focus type="text" id="fname" name="fname" placeholder="First Name" minlength="3" autocomplete="off"></td>
                 </tr>
                 <tr>
                     <td><span id="fname_error" class="error" aria-live="polite"></span></td>
                 </tr>
                 <tr>
-                    <td><input required focus type="text" id="lname" name="lname" placeholder="Last Name" minlength="3"></td>
+                    <td><input required focus type="text" id="lname" name="lname" placeholder="Last Name" minlength="3" autocomplete="off"></td>
                 </tr>
                 <tr>    
                     <td><span id="lname_error" class="error" aria-live="polite"></span></td>
                 </tr>
                 <tr>
-                    <td><input required type="text" id="email" name="email" placeholder="Email"></td>
+                    <td><input required type="email" id="email" name="email" placeholder="Email" minlength="8" autocomplete="off"></td>
                 </tr>
                 <tr>    
-                    <td><span id="email_error" class="error" aria-live="polite"></span></td>
+                    <td><span required id="email_error" class="error" aria-live="polite"></span></td>
                 </tr>
                 <tr>
-                    <td><input required type="password" id="pw" name="password" placeholder="Password"></td>
+                    <td><input required type="password" id="pw" name="password" placeholder="Password" minlength="8" autocomplete="off"></td>
                 </tr>
                 <tr>    
-                    <td><span id="password" class="error" aria-live="polite"></span></td>
+                    <td><span id="password_error" class="error" aria-live="polite"></span></td>
                 </tr>
                 <tr>
                     <td><button type="submit" id="sign up">sign up</button></td> 
@@ -127,8 +127,10 @@
 
             function show_fname_error()
             {
-                const is_valid = /\d/.test(fname.value);
-                if(is_valid)
+                //check there is no character or numbers
+                let has_numbers = /\d/.test(fname.value);
+                
+                if(has_numbers)
                 {
                     fname_error.textContent = "Your first name cannot contain numbers";
                 }
@@ -160,7 +162,7 @@
 
             function show_lname_error()
             {
-                const is_valid = /\d/.test(lname.value);
+                let is_valid = /\d/.test(lname.value);
                 if(is_valid)
                 {
                     lname_error.textContent = "Your last name cannot contain numbers";
@@ -179,37 +181,90 @@
             const email = document.getElementById("email");
             const email_error = document.getElementById("email_error");
 
-            email.addEventListener("input", (event) => {
-                    if(email.validity.valid)
-                    {
-                        //password strength test
-                        email_error.textContent = "";
-                        email_error.reset();
-                    }
-                    else
-                    {
-                        show_email_error();
-                    }
-            });
-
-            function show_email_error()
-            { 
-                
-                let is_valid = /email/.test(email.value);
-                if(is_valid)
-                {
-                    email_eror.textContent = "This doesn't appear tobe a valid email";
-                }
-                else if(email.validity.valueMissing)
-                {
-                    email_error.textContent = "You need to enter your email";
-                }
-                else if(email.validity.tooShort)
-                {
-                    email_error.textContent = "Email too short";
-                }
+        email.addEventListener("input",(event) => {
+            if(email.validity.valid)
+            {
+                email_error.textContent = "";
+                email_error.reset();
             }
-            //form submittion
+            else
+            {
+                show_error();
+            }
+        });
+
+        function show_error()
+        {
+            if (email.validity.valueMissing) 
+            {
+                // If the field is empty,
+                // display the following error message.
+                email_error.textContent = "You need to enter an email address.";
+            } 
+            else if (email.validity.typeMismatch) 
+            {
+                // If the field doesn't contain an email address,
+                // display the following error message.
+                email_error.textContent = "Entered value needs to be an email address.";
+            }
+            else if (email.validity.tooShort)
+            {
+                // If the data is too short,
+                // display the following error message.
+                email_error.textContent = `Email should be at least ${email.minLength} characters; you entered ${email.value.length}.`;
+            }
+        }
+
+        //password
+        const pw = document.getElementsById("pw");
+        const pw_error = document.getElementById("password_error");
+            
+        pw.addEventListener("input", (event) => {
+            if(pw.validity.valid)
+            {
+                pw_error.textContent = "";
+                pw_error.reset(); 
+            }
+            else
+            {
+                show_passowrd_error();
+            }
+        });
+
+        function show_password_error()
+        {
+            let is_valid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(pw.value);
+            let has_uppercase = /[A-Z]/.test(pw.value);
+            let has_lowercase = /[a-z]/.test(pw.value);
+            let has_digit = /\d/.test(pw.value);
+            let has_symbols = /^[!@#\$%\^\&*\)\(+=._-]+$/.test(pw.value);
+
+            if(pw.validity.valueMissing)
+            {
+                pw.textContent = "Password cannot be empty";
+            }
+            else if(has_uppercase)
+            {
+                pw.textContent = "Password must contain atleast one Uppercase letter";
+            }
+            else if(has_lowercase)
+            {
+                pw.textContent = "Password must contain atleast one Lowercase letter";
+            }
+            else if(has_digit)
+            {
+                pw.textContent = "Password must contain atleast one digit";
+            }
+            else if(has_symbols)
+            {
+                pw.textContent = "Password must contain atleast one symbol";
+            }
+            else if(pw.validity.tooShort)
+            {
+                pw.textContent = `Password must be atleast ${pw.minLength} characters, you entered only ${pw.value.length} characters`;
+            }
+        }
+        //form submittion
             form.addEventListener("submit", (event) => {
                 if(!fname.validity.valid)
                 {

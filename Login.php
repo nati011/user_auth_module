@@ -6,7 +6,7 @@
         //validate input
 
         //hash password
-        $hashedpassword = hash("md5",$_POST['password']);
+        $hashedpassword = hash("sha-512",$_POST['password']);
         $sql = "SELECT concat firstName,lastName from user_account where email = :email AND hashedPassword = :hashedPassword";
         try
         {
@@ -62,10 +62,10 @@ input:required + span::after {
             <form action="http://localhost/first/USER_Authentication_Project/Login.php" method="POST">
                 
                 <tr>
-                    <td><input required focus type="text" id="email" name="email" placeholder="email"></td>
+                    <td><input required focus type="text" id="email" name="email" placeholder="email" autocomplete="off"></td>
                 </tr>
                 <tr>
-                    <td><input required type="password" id="pw" name="password" placeholder="password"></td>
+                    <td><input required type="password" id="pw" name="password" placeholder="password" autocomplete="off"></td>
                 </tr>
                 <tr>
                     <td><input type="submit" id="Log in" value="Log in"></td> 

@@ -73,18 +73,18 @@
         <table>
             <form novalidate action="http://localhost/first/USER_Authentication_Project/Signup.php" method="GET">
                 <tr>
-                    <td><input required focus type="text" id="fname" name="fname" placeholder="First Name" minlength="3"></td>
+                    <td><input required focus type="text" id="fname" name="fname" placeholder="First Name" minlength="3" autocomplete="off"></td>
                     <span id="fname_error" class="error" aria-live="polite"></span>
                 </tr>
                 <tr>
-                    <td><input required focus type="text" id="lname" name="lname" placeholder="Last Name"></td>
+                    <td><input required focus type="text" id="lname" name="lname" placeholder="Last Name" autocomplete="off"></td>
                     
                 </tr>
                 <tr>
-                    <td><input required type="text" id="email" name="email" placeholder="Email"></td>
+                    <td><input required type="text" id="email" name="email" placeholder="Email" autocomplete="off"></td>
                 </tr>
                 <tr>
-                    <td><input required type="password" id="pw" name="password" placeholder="Password"></td>
+                    <td><input required type="password" id="pw" name="password" placeholder="Password" autocomplete="off"></td>
                 </tr>
                 <tr>
                     <td><button type="submit" id="sign up">sign up</button></td> 
